@@ -207,5 +207,19 @@ function xmldb_quiz_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2023100901, 'quiz');
     }
 
+    if ($oldversion < 2023112800) {
+        // Define field displaynumber to be added to quiz_slots.
+        $table = new xmldb_table('quiz');
+        $field = new xmldb_field('questioncontainerstyle', XMLDB_TYPE_INTEGER, '1', null, null, null, '0');
+
+        // Conditionally launch add field displaynumber.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Quiz savepoint reached.
+        upgrade_mod_savepoint(true, 2023112800, 'quiz');
+    }
+
     return true;
 }

@@ -72,6 +72,9 @@ define('QUIZ_SHOWIMAGE_SMALL', 1);
  */
 define('QUIZ_SHOWIMAGE_LARGE', 2);
 
+define('QUIZ_QUESTION_CONTAINER_DEFAULT', 0);
+define('QUIZ_QUESTION_CONTAINER_OUTLINE', 1);
+
 
 // Functions related to attempts ///////////////////////////////////////////////
 
@@ -906,6 +909,18 @@ function quiz_get_user_image_options() {
         QUIZ_SHOWIMAGE_NONE  => get_string('shownoimage', 'quiz'),
         QUIZ_SHOWIMAGE_SMALL => get_string('showsmallimage', 'quiz'),
         QUIZ_SHOWIMAGE_LARGE => get_string('showlargeimage', 'quiz'),
+    ];
+}
+
+/**
+ * Returns an array of styles for the quiz question container.
+ *
+ * @return array string => lang string the options for the styles for the quiz question container.
+ */
+function quiz_get_question_container_styles() {
+    return [
+        QUIZ_QUESTION_CONTAINER_DEFAULT => get_string('questioncontainerdefault', 'quiz'),
+        QUIZ_QUESTION_CONTAINER_OUTLINE => get_string('questioncontaineroutline', 'quiz'),
     ];
 }
 
