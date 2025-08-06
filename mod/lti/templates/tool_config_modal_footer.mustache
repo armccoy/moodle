@@ -37,5 +37,11 @@
 }}
 <div>
   <button type="button" class="btn btn-primary" onclick="location.href='{{mailto}}';">{{#str}} tooldetailsmodalemail, mod_lti {{/str}}</button>
+    <button type="button" class="btn btn-secondary" title="{{#str}}copytoclipboard, tool_componentlibrary{{/str}}"
+            data-action="copytoclipboard" data-clipboard-target="#lti-tool-{{deploymentid}}"
+            data-clipboard-success-message="{{#str}} tooldetailsmodalcopied, mod_lti {{/str}}">{{#str}} tooldetailsmodalcopytoclipboard, mod_lti {{/str}}</button>
   <button type="button" class="btn btn-secondary" data-action="hide">{{#str}} cancel {{/str}}</button>
 </div>
+{{#js}}
+    require(['core/copy_to_clipboard']);
+{{/js}}

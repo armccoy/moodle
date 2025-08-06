@@ -668,7 +668,8 @@
                 encodeURIComponent(element.data('authrequesturlstr')) + ':%20' +
                 encodeURIComponent(element.data('authrequesturl')) + '%0D%0A';
             context = {
-                'mailto': mailTo
+                'mailto': mailTo,
+                'deploymentid': element.data('deploymentid')
             };
             var footerPromise = templates.render('mod_lti/tool_config_modal_footer', context);
             Modal.create({
