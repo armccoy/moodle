@@ -93,3 +93,29 @@ Feature: Export calendar events
     And I set the field "Recent and next 60 days" to "1"
     When I click on "Get calendar URL" "button"
     Then the "value" attribute of "Calendar URL" "field" should contain "&preset_what=user&"
+
+  Scenario: Entering an invalid custom start date
+    Given I follow "Full calendar"
+    And I click on "Import or export calendars" "link"
+    And I click on "Export calendar" "button"
+    And I set the field "All event" to "1"
+    And I set the field "Custom range" to "1"
+    And I set the following fields to these values:
+      | id_exportstartdate_day   | 1       |
+      | id_exportstartdate_month | 1       |
+      | id_exportstartdate_year  | 2020    |
+    And I press "Export"
+    Then I should see "You cannot export calendar events before"
+
+  Scenario: Entering an invalid custom end date
+    Given I follow "Full calendar"
+    And I click on "Import or export calendars" "link"
+    And I click on "Export calendar" "button"
+    And I set the field "All event" to "1"
+    And I set the field "Custom range" to "1"
+    And I set the following fields to these values:
+      | id_exportenddate_day   | 1       |
+      | id_exportenddate_month | 1       |
+      | id_exportenddate_year  | 2030    |
+    And I press "Export"
+    Then I should see "You cannot export calendar events after"
