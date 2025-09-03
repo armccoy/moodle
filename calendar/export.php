@@ -175,7 +175,10 @@ if ($data = $exportform->get_data()) {
         $calendarurl = html_writer::div($exporturl, 'generalbox calendarurl mt-3');
     }
 
-    if (!empty($data->export)) {
+    if (!empty($data->export) || !empty($data->exportcsv)) {
+        if (!empty($data->exportcsv)) {
+            $link->param('exportcsv', 1); // or ->param('exportformat', 'csv') if you prefer
+        }
         redirect($link);
     }
 }

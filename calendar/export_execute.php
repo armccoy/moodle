@@ -226,6 +226,87 @@ $limitnum = 0;
 $events = calendar_get_legacy_events($timestart, $timeend, $users, $groups, array_keys($paramcourses), false, true,
         $paramcategory, $limitnum);
 
+// Detect CSV submit (button named 'exportcsv' in the form).
+$exportcsv = optional_param('exportcsv', '', PARAM_RAW);
+if ($exportcsv !== '') {
+    // Prepare filename and headers.
+    $filename = 'moodle_calendar_export_' . date('Ymd') . '.csv';
+
+    if (!defined('BEHAT_SITE_RUNNING')) {
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
+        header('Cache-Control: private, must-revalidate, pre-check=0, post-check=0, max-age=0');
+        header('Expires: ' . gmdate('D, d M Y H:i:s', 0) . ' GMT');
+        header('Pragma: no-cache');
+        header('Accept-Ranges: none');
+        header('Content-disposition: attachment; filename=' . clean_filename($filename));
+        header('Content-Type: text/csv; charset=utf-8');
+    }
+
+    // Optional: prefix UTF-8 BOM for Excel to recognise UTF-8.
+    echo "\xEF\xBB\xBF";
+
+    $out = fopen('php://output', 'w');
+    if ($out === false) {
+        throw new moodle_exception('csvwritefailed', 'calendar');
+    }
+
+    // CSV header row — adapt columns to your needs.
+    $headers = [
+        'Event ID',
+        'Name',
+        'Description',
+        'Activity ends',
+        'Course ID',
+        'URL'
+    ];
+    fputcsv($out, $headers);
+
+    // Loop events and write rows — reuse the same visibility checks used in ICS export.
+    foreach ($events as $event) {
+        if (!empty($event->modulename)) {
+            $instances = get_fast_modinfo($event->courseid, $userid)->get_instances_of($event->modulename);
+            if (empty($instances[$event->instance]->uservisible)) {
+                continue;
+            }
+        }
+
+        // Prepare event fields in the same way ICS did for name/description.
+        $me = new calendar_event($event);
+
+        $name = format_string($event->name, true, ['context' => $me->context]);
+
+        $description = format_text($me->description, $me->format, ['context' => $me->context]);
+        $description = html_to_text($description, 0);
+
+        $timeend   = isset($event->timestart) && isset($event->timeduration)
+            ? gmdate('Y-m-d H:i:s', (int)($event->timestart + $event->timeduration))
+            : '';
+
+        $courseid = isset($event->courseid) ? $event->courseid : '';
+
+        $urlstr = '';
+        if (!empty($event->id)) {
+            $url = new moodle_url('/calendar/view.php', ['id' => $event->id]);
+            $urlstr = $url->out(false);
+        }
+
+        $row = [
+            $event->id ?? '',
+            $name,
+            $description,
+            $timeend,
+            $courseid,
+            $urlstr
+        ];
+
+        fputcsv($out, $row);
+    }
+
+    fclose($out);
+    // End script after streaming the CSV.
+    exit;
+}
+
 $ical = new iCalendar;
 $ical->add_property('method', 'PUBLISH');
 $ical->add_property('prodid', '-//Moodle Pty Ltd//NONSGML Moodle Version ' . $CFG->version . '//EN');
