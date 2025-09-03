@@ -24,7 +24,7 @@
 
 .mform .d-flex {
     .fitem {
-        margin: 0.1rem 0.25rem 0.1rem 0 !important; /* stylelint-disable-line declaration-no-important */
+        margin: 0 !important; /* stylelint-disable-line declaration-no-important */
     }
     br + label {
         justify-content: flex-start;
