@@ -147,7 +147,6 @@ $string['eventsubscriptioneditwarning'] = 'This calendar event is part of a subs
 $string['expired'] = 'Expired';
 $string['explain_site_timeformat'] = 'You can choose to see times in either 12 or 24 hour format for the whole site. If you choose "default", then the format will be automatically chosen according to the language you use in the site. This setting can be overridden by user preferences.';
 $string['export'] = 'Export';
-$string['exportcsv'] = 'Export to CSV';
 $string['exporthelp'] = '<p>The calendar URL provides a dynamic link for importing events into other calendars. Any new, changed or deleted events in the source calendar <strong>will</strong> be reflected in the other calendars.</p>
 <p>The calendar export allows you to create a backup copy of events, which may be imported into other calendars. Updates made in the source calendar <strong>will not</strong> be reflected in the other calendars.</p>';
 $string['exportbutton'] = 'Export';
